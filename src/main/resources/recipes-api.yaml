@@ -1,0 +1,216 @@
+openapi: 3.0.2
+info:
+  title: Recipes API
+  description: |-
+      Recipes API is a RESTful API for managing recipes.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local server
+tags:
+  - name: recipe
+    description: Recipes
+paths:
+  /recipe:
+    post:
+      tags:
+        - recipe
+      summary: Create a new recipe
+      description: Creates a new recipe with the supplied data
+      operationId: createRecipe
+      requestBody:
+        description: Create a new recipe in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RecipeDto'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDto'
+        '405':
+          description: Invalid input
+  '/recipe/{recipeId}':
+    get:
+      tags:
+        - recipe
+      summary: Find recipe by ID
+      description: Returns a single recipe
+      operationId: getRecipeById
+      parameters:
+        - name: recipeId
+          in: path
+          description: ID of recipe to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDto'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Recipe with specified ID not found
+    put:
+      tags:
+        - recipe
+      summary: Update an existing recipe
+      description: Update an existing recipe by id
+      operationId: updateRecipe
+      parameters:
+        - name: recipeId
+          in: path
+          description: ID of recipe to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existent recipe
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RecipeDto'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDto'
+        '400':
+          description: Supplied recipe ID is invalid
+        '404':
+          description: Recipe with that ID does not exist
+        '405':
+          description: Validation exception
+    delete:
+      tags:
+        - recipe
+      summary: Deletes a recipe
+      description: ''
+      operationId: deleteRecipe
+      parameters:
+        - name: recipeId
+          in: path
+          description: ID of recipe to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid recipe value
+  /recipe/search:
+    get:
+      tags:
+        - recipe
+      summary: Finds Recipes by the provided search criteria
+      description: Returns a list of recipes that match the given criteria.
+      operationId: filterRecipes
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: available
+            enum:
+              - available
+              - pending
+              - sold
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeDto'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeDto'
+        '400':
+          description: Invalid status value
+components:
+  schemas:
+    RecipeDto:
+      description: Recipe data transfer object
+      required:
+        - name
+        - ingredients
+        - numberOfServings
+        - vegetarian
+        - instructions
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID of the recipe
+          example: 10
+        name:
+          type: string
+          description: name of this recipe
+          example: lasagna with salmon and basil
+        ingredients:
+          type: array
+          description: array of ingredients in this recipe
+          items:
+            type: string
+        numberOfServings:
+          type: number
+          format: double
+          description: number of servings this recipe produces
+          example: 4
+        vegetarian:
+          type: boolean
+          description: whether or not a dish is vegetarian
+          example: false
+        instructions:
+          type: string
+          minLength: 1
+          maxLength: 6144
+          description: instructions for how to make this dish
+          example: |-
+            Preheat oven to 350 degrees F. Lightly oil a 9×13 baking dish or coat with...
+    ModelApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    Recipe:
+      description: The recipe to create
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Recipe'

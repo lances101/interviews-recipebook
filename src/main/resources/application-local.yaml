@@ -1,0 +1,9 @@
+
+# Local configuration
+
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/abnamro
+    username: mariadb
+    password: mariadb
