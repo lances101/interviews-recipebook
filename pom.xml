@@ -40,14 +40,13 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>${mariadb-client.version}</version>
         </dependency>
 
         <!-- Testing -->
@@ -67,6 +66,7 @@
 
     <build>
         <plugins>
+            <!-- Lombok and Mapstruct config -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -84,13 +84,61 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${checkstyle-maven-plugin.version}</version>
                 <configuration>
-                    <configLocation>checkstyle.xml</configLocation>
+                    <configLocation>google_checks.xml</configLocation>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>check</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.cosium.code</groupId>
+                <artifactId>git-code-format-maven-plugin</artifactId>
+                <version>${git-code-format-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>install-formatter-hook</id>
+                        <goals>
+                            <goal>install-hooks</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>validate-code-format</id>
+                        <goals>
+                            <goal>validate-code-format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Spring doc generators -->
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/recipes-api.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <apiPackage>com.boromak.interviews.recipebook.generated.api</apiPackage>
+                            <modelPackage>com.boromak.interviews.recipebook.generated.model</modelPackage>
+                            <configOptions>
+                                <documentationProvider>springdoc</documentationProvider>
+                                <delegatePattern>true</delegatePattern>
+                                <!-- We do not want to generate any main classes -->
+                                <interfaceOnly>true</interfaceOnly>
+                                <!-- Add lombok builder and constructor annotations -->
+                                <additionalModelTypeAnnotations>@lombok.AllArgsConstructor @lombok.Builder @lombok.NoArgsConstructor</additionalModelTypeAnnotations>
+                                <!-- Bean validation for incoming requests-->
+                                <performBeanValidation>true</performBeanValidation>
+                            </configOptions>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
