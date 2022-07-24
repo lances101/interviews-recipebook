@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /** Application class. */
 @SpringBootApplication
-public class Abnamro202207Application {
+public class RecipeBookApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(Abnamro202207Application.class, args);
+    SpringApplication.run(RecipeBookApplication.class, args);
   }
 }

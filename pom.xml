@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.boromak.interviews</groupId>
-    <artifactId>abnamro202207</artifactId>
+    <artifactId>recipebook202207</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>abnamro202207</name>
-    <description>abnamro202207</description>
+    <name>recipebook202207</name>
+    <description>recipebook202207</description>
     <properties>
         <java.version>17</java.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>

@@ -8,6 +8,6 @@ services:
       MARIADB_ROOT_PASSWORD: root
       MARIADB_USER: mariadb
       MARIADB_PASSWORD: mariadb
-      MARIADB_DATABASE: abnamro
+      MARIADB_DATABASE: recipebook
     ports:
       - "3306:3306"

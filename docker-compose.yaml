@@ -8,7 +8,7 @@ services:
       MARIADB_ROOT_PASSWORD: root
       MARIADB_USER: mariadb
       MARIADB_PASSWORD: mariadb
-      MARIADB_DATABASE: abnamro
+      MARIADB_DATABASE: recipebook
     ports:
       - "3306:3306"
     healthcheck:
@@ -17,12 +17,12 @@ services:
       retries: 20
       interval: 3s
   recipebook:
-    image: abnamro202207:0.0.1-SNAPSHOT
+    image: recipebook202207:0.0.1-SNAPSHOT
     depends_on:
       db:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mariadb://db:3306/abnamro
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://db:3306/recipebook
       - SPRING_PROFILES_ACTIVE=local
     ports:
       - "8080:8080"
