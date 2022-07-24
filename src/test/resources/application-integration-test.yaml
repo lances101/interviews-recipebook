@@ -1,0 +1,17 @@
+
+# Integration tests configuration
+
+spring:
+  datasource:
+    url: jdbc:tc:mariadb:10.6.8:///
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDBDialect
+
+## Log everything for RestTemplate for IT
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          client:
+            RestTemplate=DEBUG:

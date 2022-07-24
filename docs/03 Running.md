@@ -5,7 +5,23 @@
 - Docker 
   - used for both development and integration tests
   - Docker version - `4.10.1` 
-  - Docker compose version - `1.29.2` 
+  - Docker compose version - `1.29.2`
+  
+Notes: 
+- all commands assume you are in the project root directory.
+- commands tested on MacOS and Linux, Windows might have some quirks.
+
+## Running the project via Docker (easiest)
+
+1. Build the Docker image via Maven:
+```bash
+./mvnw jib:dockerBuild
+```
+2. Run everything with Docker Compose:
+```bash
+docker-compose -p abnamro-local-run up
+```
+
 
 ## Running in "local" dev mode
 
@@ -24,3 +40,5 @@ via the IDE of your choice or by running the following Maven command:
 ```
 
 ## Packaging the image
+
+Image is packaged by default on build via JIB. Currently it's not pushed anywhere. 

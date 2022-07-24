@@ -29,8 +29,8 @@ import org.hibernate.Hibernate;
 @Setter
 @ToString
 @Entity
-@Builder
-public final class Recipe {
+@Builder(toBuilder = true)
+public class Recipe {
 
   /**
    * Maximum length of the recipe instructions text. Reasoning behind number:

@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  db:
+    image: mariadb:10.6.8
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_USER: mariadb
+      MARIADB_PASSWORD: mariadb
+      MARIADB_DATABASE: abnamro
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-proot"]
+      timeout: 20s
+      retries: 20
+      interval: 3s
+  recipebook:
+    image: abnamro202207:0.0.1-SNAPSHOT
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://db:3306/abnamro
+      - SPRING_PROFILES_ACTIVE=local
+    ports:
+      - "8080:8080"
+

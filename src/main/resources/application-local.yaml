@@ -7,3 +7,5 @@ spring:
     url: jdbc:mariadb://localhost:3306/abnamro
     username: mariadb
     password: mariadb
+  jpa:
+    show-sql: true

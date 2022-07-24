@@ -2,7 +2,7 @@ openapi: 3.0.2
 info:
   title: Recipes API
   description: |-
-      Recipes API is a RESTful API for managing recipes.
+    Recipes API is a RESTful API for managing recipes.
   version: 1.0.0
 servers:
   - url: http://localhost:8080/api/v1
@@ -22,9 +22,6 @@ paths:
         description: Create a new recipe in the store
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/RecipeDto'
-          application/x-www-form-urlencoded:
             schema:
               $ref: '#/components/schemas/RecipeDto'
         required: true
@@ -123,36 +120,57 @@ paths:
         - recipe
       summary: Finds Recipes by the provided search criteria
       description: Returns a list of recipes that match the given criteria.
-      operationId: filterRecipes
+      operationId: searchRecipes
+      x-spring-paginated: true
       parameters:
-        - name: status
+        - name: vegetarian
           in: query
-          description: Status values that need to be considered for filter
+          description: Filter on whether the dish vegetarian or not
           required: false
-          explode: true
+          schema:
+            type: boolean
+        - name: min_number_of_servings
+          in: query
+          description: Filter on the minimum number of servings that the recipe is for
+          required: false
+          schema:
+            type: number
+            format: double
+        - name: include_ingredients
+          in: query
+          description: Filter on the list of ingredients that the recipe must contain (LIKE-style search)
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: exclude_ingredients
+          in: query
+          description: Filter on the list of ingredients that the recipe must not contain (LIKE-style search)
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: instructions
+          in: query
+          description: Filter on the instructions that the recipe must contain (LIKE-style search)
           schema:
             type: string
-            default: available
-            enum:
-              - available
-              - pending
-              - sold
       responses:
         '200':
           description: successful operation
           content:
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RecipeDto'
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RecipeDto'
+                type: PageOfRecipeDto
         '400':
-          description: Invalid status value
+          description: Invalid query string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+
 components:
   schemas:
     RecipeDto:
@@ -195,22 +213,26 @@ components:
           description: instructions for how to make this dish
           example: |-
             Preheat oven to 350 degrees F. Lightly oil a 9×13 baking dish or coat with...
-    ModelApiResponse:
+    ErrorDto:
       type: object
       properties:
-        code:
-          type: integer
+        timestamp:
+          type: Date
+        status:
+          type: number
           format: int32
-        type:
+        error:
           type: string
         message:
+          type: string
+        path:
           type: string
       xml:
         name: '##default'
   requestBodies:
-    Recipe:
+    RecipeDto:
       description: The recipe to create
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Recipe'
+            $ref: '#/components/schemas/RecipeDto'
