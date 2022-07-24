@@ -1,7 +1,3 @@
-# TODO:
-
-- delete all "(?)"
-
 # Intro
 The project is essentially a "Favorite recipe management system". See PDF for details.  
 

@@ -26,7 +26,7 @@ docker-compose -p recipebook-local-run up
 
 ## Running in "local" dev mode
 
-To run the project locally in a development environment, we will need an instance of MariaDB and WHAT ELSE(?).
+To run the project locally in a development environment, we will need an instance of MariaDB.
 In order to do so, run the following command:
 
 ```bash
